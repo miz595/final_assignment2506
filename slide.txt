@@ -1,0 +1,1419 @@
+注意事項: 本資料の再利用(2次利用)について
+本資料は東京大学 松尾・岩澤研究室が作成し、東京大学サマースクール2024として2024年9月から11月にかけて開催されたLLM大規模言語モデル講座の講義資料となっております。
+本資料はクリエイティブ・コモンズのCC BY-NC-SA 4.0 DEED(表示 – 非営利 – 継承 4.0 国際)のライセンスが登録されています。
+ライセンスの表示について
+各スライドのページ最下部にライセンスの記載がございます。再利用時にはこちらの要素も含めてご利用ください。ただしこちらはスライドマスターに設定されている為、再利用時に複製が困難な場合は、下記のテキストボックスを利用の上、ハイパーリンクも含めてライセンスの表記をする様にお願いします。
+
+
+再利用するページに参照論文等の引用がある場合は、巻末にあるReferenceより引用箇所を掲載してください。(引用元の著作権者に対しての再利用の正当性が証明できなくなる可能性がございます。)
+非営利目的での利用に限り、再利用(2次利用)が許諾されております。
+営利目的での再利用の場合はこちらからお問い合わせください。
+元の表現が変わらない範囲(フォント、サイズ等)であれば改変可能です。
+それ以外の改変や、その他ライセンスについての詳細は、こちらをご覧の上、適切な取り扱いをして頂くようお願いします。
+東京大学 松尾・岩澤研究室
+LLM 大規模言語モデル講座 講義資料  © 2024 by  東京大学松尾・岩澤研究室 is licensed under CC BY-NC-ND 4.0
+2. PromptingとRAG
+大規模言語モデル 2024
+講師：原田 憲旺
+2024/09/11
+原田 憲旺（はらだ けんおう）@KH_ls_ippon
+‹#›
+松尾・岩澤研 博士課程 2年
+去年の講座立ち上げ時に講座の資料作成・コンペ作成担当
+GENIACで評価担当
+■ 研究テーマ
+大規模言語モデルの文脈活用能力について
+Mechanistic interpretability
+Lost in the middle
+Instruction following
+教育場面における大規模言語モデル応用
+Retrieval augmented generation
+■ 担当講座
+第2回 講義 PromptingとRAG
+解きたいタスクにLLMを素早く適応させる方法について
+第3回 演習 Pre-training
+GPT-2の実装
+特にAttentionについて実装レベルでの理解を目指す
+自然言語処理学会2024の発表風景
+
+
+LLM講座2024の全体像
+https://weblab.t.u-tokyo.ac.jp/education/large-language-model/
+‹#›
+第1回：Overview of Language Models
+第2回：PromptingとRAG
+第3回：Pre-training
+第4回：Scaling Law
+第5回：Supervised Fine-Tuning
+第6回：LLMの発展を支える半導体エコシステム
+第7回：RLHF & Alignment
+第8回：Advanced Pre-training
+第9回：Safety
+第10回：LLMの分析と理論
+第11回：Application of LLM (Domain Specific LLM)
+第12回：Application of LLM (LLM for Control)
+最終課題：受講生同士で競い合う，LLMに関するコンペティション型の課題を実施予定
+前半の回
+(基礎)
+後半の回
+(応用)
+
+
+LLM講座2024の全体像
+https://weblab.t.u-tokyo.ac.jp/education/large-language-model/
+‹#›
+第1回：Overview of Language Models
+第2回：PromptingとRAG
+第3回：Pre-training
+第4回：Scaling Law
+第5回：Supervised Fine-Tuning
+第6回：LLMの発展を支える半導体エコシステム
+第7回：RLHF & Alignment
+第8回：Advanced Pre-training
+第9回：Safety
+第10回：LLMの分析と理論
+第11回：Application of LLM (Domain Specific LLM)
+第12回：Application of LLM (LLM for Control)
+最終課題：受講生同士で競い合う，LLMに関するコンペティション型の課題を実施予定
+前半の回
+(基礎)
+後半の回
+(応用)
+学習完了後のLLMを
+活用する
+
+
+LLM講座2024の全体像
+https://weblab.t.u-tokyo.ac.jp/education/large-language-model/
+‹#›
+第1回：Overview of Language Models
+第2回：PromptingとRAG
+第3回：Pre-training
+第4回：Scaling Law
+第5回：Supervised Fine-Tuning
+第6回：LLMの発展を支える半導体エコシステム
+第7回：RLHF & Alignment
+第8回：Advanced Pre-training
+第9回：Safety
+第10回：LLMの分析と理論
+第11回：Application of LLM (Domain Specific LLM)
+第12回：Application of LLM (LLM for Control)
+最終課題：受講生同士で競い合う，LLMに関するコンペティション型の課題を実施予定
+前半の回
+(基礎)
+後半の回
+(応用)
+学習による性能向上
+
+
+LLM講座2024の全体像
+https://weblab.t.u-tokyo.ac.jp/education/large-language-model/
+‹#›
+第1回：Overview of Language Models
+第2回：PromptingとRAG
+第3回：Pre-training
+第4回：Scaling Law
+第5回：Supervised Fine-Tuning
+第6回：LLMの発展を支える半導体エコシステム
+第7回：RLHF & Alignment
+第8回：Advanced Pre-training
+第9回：Safety
+第10回：LLMの分析と理論
+第11回：Application of LLM (Domain Specific LLM)
+第12回：Application of LLM (LLM for Control)
+最終課題：受講生同士で競い合う，LLMに関するコンペティション型の課題を実施予定
+前半の回
+(基礎)
+後半の回
+(応用)
+マルチモーダル情報利用
+行動選択にLLMを活用
+
+
+LLM講座2024の全体像
+https://weblab.t.u-tokyo.ac.jp/education/large-language-model/
+‹#›
+第1回：Overview of Language Models
+第2回：PromptingとRAG
+第3回：Pre-training
+第4回：Scaling Law
+第5回：Supervised Fine-Tuning
+第6回：LLMの発展を支える半導体エコシステム
+第7回：RLHF & Alignment
+第8回：Advanced Pre-training
+第9回：Safety
+第10回：LLMの分析と理論
+第11回：Application of LLM (Domain Specific LLM)
+第12回：Application of LLM (LLM for Control)
+最終課題：受講生同士で競い合う，LLMに関するコンペティション型の課題を実施予定
+前半の回
+(基礎)
+後半の回
+(応用)
+なぜ/どのようにLLMは
+成功/失敗するのか
+
+
+LLM講座2024の全体像
+https://weblab.t.u-tokyo.ac.jp/education/large-language-model/
+‹#›
+第1回：Overview of Language Models
+第2回：PromptingとRAG
+第3回：Pre-training
+第4回：Scaling Law
+第5回：Supervised Fine-Tuning
+第6回：LLMの発展を支える半導体エコシステム
+第7回：RLHF & Alignment
+第8回：Advanced Pre-training
+第9回：Safety
+第10回：LLMの分析と理論
+第11回：Application of LLM (Domain Specific LLM)
+第12回：Application of LLM (LLM for Control)
+最終課題：受講生同士で競い合う，LLMに関するコンペティション型の課題を実施予定
+前半の回
+(基礎)
+後半の回
+(応用)
+学習完了後のLLMの性能を引き出す
+Day2の目的・目標
+‹#›
+■目的
+学習済みのLLMを（追加学習せずに）活用する技術について学ぶ
+
+■ 目標
+プロンプティングや文脈内学習とはなにか説明できるようになる．
+プロンプティングにより性能を改善する方法を説明できるようになる．
+Augmented Language Modelの必要性と原理を説明できるようになる．
+目次
+‹#›
+講義
+（導入）学習済みモデルの活用
+プロンプティング (Prompting) / 文脈内学習 (In-Context Learning)
+Augmented Language Models
+RAG, Tool-use, Agent
+
+演習
+Hugging Face上の公開モデルを使った基本的なプロンプティングの実装
+Retrieval Augmented Generationの実装
+言語モデル (Language Models, LM)とは
+‹#›
+ 
+Day1の復習
+…
+
+日本の首都は → 東京
+ 
+自己回帰言語モデルの学習
+‹#›
+Next Token Prediction（自己教師あり学習の一種）→ 学習用のテキストデータを使って、正しいトークンの生成確率が高まるように
+吾輩
+吾輩　は
+吾輩　は　猫
+吾輩　は　猫　で
+吾輩　は　猫　で　ある
+LM
+LM
+LM
+LM
+LM
+P(は|吾輩)
+P(猫|吾輩, は)
+P(で|…)
+P(ある|…)
+P(。|…)
+入力
+予測
+は
+猫
+で
+ある
+。
+正解
+
+予測と正解の誤差 (交差エントロピー)が
+小さくなるように学習する
+
+
+
+
+
+Day1の復習
+Transformer
+“Attention is All You Need”, NeurIPS 2017
+‹#›
+Googleを中心にした研究チームが2017年に発表
+Self Attentionを中心にしたネットワーク構造（左）※構造の詳細はDay3で話します
+主に翻訳等の教師あり学習で性能検証（右）例：英語文 → Transformer → ドイツ語文となるように誤差逆伝播で訓練
+[58] Ashish Vaswani et al. (2017) “Attention Is All You Need” NeurIPS 2017 より引用
+GPT-4の専門知識 (“GPT-4 Technical Report”, 2023)
+‹#›
+
+
+OpenAIにより2023年に発表されたモデル（詳細は未公開，リーク情報はあり）
+司法試験やSAT/GREなどの多様な試験で好成績例:Uniform Bar Examでは298/400 (~90th)例：GRE (Quantitative)が163/179 (~80th)
+一方コーディング能力などではまだ低いスコア
+
+
+
+
+
+[59] OpenAI 2023 “GPT-4 Technical Report” より引用し,一部改変 
+Igaku-QA | GPT-4の専門的知識の検証
+“Evaluating gpt-4 and ChatGPTt on Japanese medical licensing examinations”2023
+‹#›
+言語モデル (GPT-4 and ChatGPT）を新たに作成した日本の医療ライセンス試験6年分のデータセット（Igaku-QA)を構築してベンチマーク
+(1) 人間の平均的な受験者よりは悪い，(2) 禁忌技を選択する傾向にある，といった問題はあるものの試験ボーダーは突破
+[60] Jungo Kasai et al. (2023), “Evaluating gpt-4 and ChatGPTt on Japanese medical licensing examinations” より引用
+LLMの活用例
+
+‹#›
+BCGのコンサルタントChatGPT活用により
+実務を模擬したタスクで質向上
+
+GitHub Copilot活用により
+エンジニアの生産性・満足度向上
+Dell'Acqua et al, 2023, [61] Navigating the Jagged Technological Frontier: Field Experimental Evidence of the Effects of AI on Knowledge Worker Productivity and Quality より
+[62] GitHub Copilot Enterprise is now generally available,
+ https://github.blog/2024-02-27-github-copilot-enterprise-is-now-generally-available/ より 
+
+‹#›
+
+大規模な学習データ
+
+言語：500万冊 (GPT-3), 1.2億冊 (GPT4)
+大規模な計算資源（GPU）
+GPT3相当の場合：A100 ×   1200基 × 30日 GPT4相当の場合：A100 × 25000基 × 100日
+
+大規模なモデル
+
+GPT-3：1750億パラメータのトランスフォーマ
+
+高コストで大規模な処理を経たモデルがAPIを通じて容易・安価に利用可能に
+ ⇒ どのようにうまく活用できるか
+学習済みモデルの違い | モデルのアクセシビリティ
+
+‹#›
+■ 非公開モデル
+一部の研究機関のみ利用可能
+PaLM (Google), Gopher (DeepMind)など
+■ APIのみ
+重みは公開されていない, プロンプトを投げて出力が得られる
+GPT (OpenAI), Gemini(Google), Claude(Anthropic) など
+■ 公開モデル
+重みまで公開されている（分析にも適している）
+Llama(Meta), Mistral, Bloom, Falconなど
+どのモデルを使うべき？
+
+‹#›
+どのようなデータで学習されているか、モデル構造は？コンテキスト長は？
+テクニカルレポートやHuggingFaceのページを参照
+
+既存のベンチマークでの性能はどれほどか
+Open LLM leaderboard[63]
+Chatbot Arena[64]
+Nejumi Leaderboard[65]
+自分が対象とするタスクに近いベンチマークについて確認
+
+推論コストはどれほどか
+API利用の場合: 各社の料金表
+公開モデル利用の場合 
+必要なGPUメモリと対応するIaaS(AWS, GCPなど)の計算機の利用料金
+LLM ホストサービスの利用(Fireworks[66]など)
+Nejumi leaderboard 3(日本語ベンチマーク)
+
+‹#›
+Nejumi LLMリーダーボード3 [65]より
+
+自分自身で評価する際のツールなど
+
+‹#›
+simple-evals/evals(OpenAI社)
+llm-jp-eval(LLM-jp)
+lm-evaluation-harness(Eluther AI)
+プロンプトの違いや
+選択肢の絞り方の違いにより
+同じモデルでも
+大きく異なるスコアが出る
+What‘s going on with the Open LLM Leaderboard? [10]より
+APIによる利用(OpenAIの例）
+
+‹#›
+GPT/Gemini/Claude をシュッと使うためのツール
+
+‹#›
+[67] https://github.com/kenoharada/llm-api-utils より
+transformers: 公開モデルを使うための便利ライブラリ
+
+‹#›
+HuggingFace社が開発するライブラリ
+今後の演習・最終課題で主に使用します
+ドキュメントやチュートリアルの一読をオススメします
+オススメ: Stanford CS224N NLP with Deep Learning | 2023 | Hugging Face Tutorial, Eric Frankel [68]
+ライブラリのコードも公開されています[69]
+学習済みモデルを活用する技術
+Day2の全体像
+‹#›
+１
+単一モデルでの工夫
+（プロンプティング）
+2
+外部ツール/知識の利用
+（Augmented LM)
+❄LLM
+回答
+❄LLM
+回答
+そもそもLLMでタスクを解くとは？
+どう問い合わせるとよいのか？（プロンプティング技術）
+なぜプロンプティングが重要なのか？
+なぜ外部ツールを使うのか
+どう外部ツールを使うのか
+目次
+‹#›
+（導入）学習済みモデルの活用
+プロンプティング (Prompting) / 文脈内学習 (In-Context Learning)
+Augmented Language Models
+１
+単一モデルでの工夫
+（プロンプティング）
+❄LLM
+回答
+指示に応じた返答
+‹#›
+
+LLM
+Generative AI
+上の単語を日本語に翻訳して
+Generative AI
+について5歳児でも分かるように説明して
+生成AI
+「生成AI（せいせいAI）」っていうのは、コンピューターが絵やお話を自分で作れる仕組みのことだよ。例えば、君が「お花の絵を描いて」と言ったら、そのコンピューターがとっても綺麗なお花の絵を描いてくれるんだ。
+言語モデルによるタスク実行
+‹#›
+
+■ QA
+（入力/条件）日本の首都は
+（出力）東京 or 京都 or パリ or xxx　※ 生成確率が最大になるものを選択
+■ センチメント分析
+（入力/条件）「あのラーメン屋はうまい」という文は
+（出力）ポジティブ vs. ネガティブ　※ 生成確率が最大になるものを選択
+⚠ もっともらしい文で「日本の首都は」に必ず「東京」が続くとは限らない！例：「日本の首都はどこですか？」「日本の首都は京都ではない」　　「平安時代の日本の首都は平安京」
+→ よりうまく入力/条件を与えることで性能を高めることはできないか？
+（補足）生成確率が最大になるものの選び方
+１ | 普通に生成（argmaxを取る）
+２ | 候補をすべて入力して文としてもっともらしいものを選択
+どのように指示出しをすると良いか？
+
+‹#›
+
+プロンプティング（Prompting）とは？
+‹#›
+Instruction (Zero-Shot)
+特定の機能の発生を促進 (prompt)するような言語モデルに入力するコンテキスト文
+Demonstration (Few-Shot)
+与える指示や事例を変えれば異なることができる
+（例：ポジネガ判定なら「次の文章がポジティブかネガティブか分類して」など）
+[6] Tom B. Brown et al.(2020), “Language Models are Few-Shot Learners”より引用
+“Language Models are Few-Shot Learners”, NeurIPS2020
+Few-Shot Promptingと文脈内学習（In-Context Learning)
+‹#›
+特にモデルが大規模な場合Few-Shotのデモンストレーションの追加で性能が大幅に上がることが多い（右図）．
+文脈から学習するため，文脈内学習 (In-Context Learning)と呼ばれる．
+Few-Shot Prompting (Demonstration)
+
+文脈（Context）
+
+[6] Tom B. Brown et al.(2020), “Language Models are Few-Shot Learners”,  NeurIPS2020 より引用
+“Language Models are Few-Shot Learners”, NeurIPS2020
+Fine-Tuningと文脈内学習
+‹#›
+従来のFine-Tuningは事例によってモデルパラメータを更新して予測を修正→　　性能が出やすい / 毎回事例を入れなくて良い（推論コストが低い）→　　タスクごとにモデルが変わる / 学習コストがかかる
+文脈内学習はパラメータを更新せず条件づけにより予測を修正→　　すべてのタスクで単一のモデルを使える / 学習コストがかからない→　　Fine-Tuningよりは性能が出にくい / 推論コストが高い
+文脈内学習も擬似的にFine-Tuningに相当することをしているという研究も“Why Can GPT Learn In-Context? Language Models Implicitly Perform Gradient Descent as Meta-Optimizers”, ACL 2023[7]
+プロンプトを利用したコンテキスト付きのQA
+
+‹#›
+■ 回答選択肢の提示
+質問：日本の首都は？
+A. 東京，B. 京都，C. パリ，D. 決まっていない
+答え： A. 東京
+
+■ 前提条件の記述
+前提：日本の首都は東京であると思われることが多いが，実は法律上は決まっていない．
+質問：日本の首都は？
+A. 東京，B. 京都，C. パリ，D. 決まっていない
+答え： D. 決まっていない
+青字：プロンプト
+オレンジ：出力
+プロンプトの重要性 | 指示文の違いの影響
+‹#›
+AG Newsはニュースのカテゴリ分類タスクhttps://huggingface.co/datasets/ag_news/viewer/default/train[9]
+プロンプトによって性能が30%変化
+
+
+精度低
+精度高
+[8] Hila Gonen et al.(2022), “Demystifying Prompts in Language Models via Perplexity Estimation”, より引用し, 一部改変
+“Demystifying Prompts in Language Models via Perplexity Estimation”, 2022
+プロンプトの重要性 | MMLUでのプロンプトの影響の例
+‹#›
+質問との間に空白の有無
+質問の前に“Question”の有無
+タスクの説明の有無
+などの細かい要素で性能やモデルの優劣が変わることもある
+
+MMLU：Massive Multitask Language Understanding[11]
+
+(その他の参考資料）“Best practices for prompt engineering with OpenAI API”[12]
+タイプ１
+タイプ２
+タイプ３
+[10] Clémentine Fourrier et al.(2023), What's going on with the Open LLM Leaderboard?
+ https://huggingface.co/blog/evaluating-mmlu-leaderboard より引用
+https://huggingface.co/blog/evaluating-mmlu-leaderboard
+プロンプトの重要性 | 指示文の違いの影響
+‹#›
+AG Newsはニュースのカテゴリ分類タスクhttps://huggingface.co/datasets/ag_news/viewer/default/train[9]
+プロンプトによって性能が30%変化
+
+
+精度低
+精度高
+[8] Hila Gonen et al.(2022), “Demystifying Prompts in Language Models via Perplexity Estimation”, より引用し, 一部改変
+“Demystifying Prompts in Language Models via Perplexity Estimation”, 2022
+デモンストレーション例入れるほど良くなる
+‹#›
+[70] Agarwal et al.(2024), “Many-Shot In-Context Learning”, より引用
+“Many-Shot In-Context Learning”, 2024
+タスクによっては、ICLのみで特化モデルやfinetuningと匹敵する
+Chain-of-Thought (CoT) Prompting
+‹#›
+Few-Shotの事例の際に思考過程を入れる（Chain of thought prompting)と，新しい質問についても思考過程を明示してくれる．
+算数の文章題など，従来難しいとされていた推論タスクでも大幅に性能が向上．
+※ GSM8kは9-12歳の正解率が60%．
+[13] Jason Wei et al.(2022), “Chain-of-Thought Prompting Elicits Reasoning in Large Language Models”, NeurIPS2022より引用
+“Chain of Thought Prompting Elicits Reasoning in Large Language Models”, NeurIPS2022
+Chain-of-Thought (CoT) Prompting
+‹#›
+“Chain of Thought Prompting Elicits Reasoning in Large Language Models”, NeurIPS2022
+質問: 太郎はテニスボールを5つ持っていました。新しくボールセットを2つ買いました。
+1つのボールセットあたり3つボールがあります。太郎は今何個のボールを持っていますか？
+
+答え: 11個
+
+質問: 食堂にはりんごが23個あります。20個がランチに使われ、新しく6個買いました。今りんごは何個ありますか？
+答え: 27個
+質問: 太郎はテニスボールを5つ持っていました。新しくボールセットを2つ買いました。
+1つのボールセットあたり3つボールがあります。太郎は今何個のボールを持っていますか？
+
+答え: 太郎くんは最初に5個持っていて、3個いりのセットを2つ買って新しく6個手に入れたので5 + 6 で11個
+
+質問: 食堂にはりんごが23個あります。20個がランチに使われ、新しく6個買いました。今りんごは何個ありますか？
+答え: 最初に23個あったりんごが20個使われて残り3個。
+その後新しく6個買ったので3 + 6で9個
+1-shot プロンプティング
+1-shot CoTプロンプティング
+モデルの出力
+モデルの出力
+CoTの結果
+
+‹#›
+さまざまな数学のデータセットで検証した結果
+特にモデルサイズが大きいときに性能の改善が大きい
+[13] Jason Wei et al.(2022), “Chain-of-Thought Prompting Elicits Reasoning in Large Language Models”, NeurIPS2022より引用
+Zero-Shot Chain-of-Thought
+‹#›
+[16] Takeshi Kojima et al.(2022), “Large Language Models are Zero-Shot Reasoners”, NeurIPS2022 より引用
+”Large Language Models are Zero-Shot Reasoners”, NeurIPS2022
+Zero-Shot CoTの推論能力
+‹#›
+
+
+
+
+シングルステップの推論で解けるタスク
+（CoTがいらない）
+常識推論（考えすぎて失敗するケースが多い）
+※ 特にありえる解を複数選択してしまう
+多段階推論が必要なタスク
+
+2022年論文で作られたタスク
+（利用したモデルは2021までのデータで学習）
+
+[16] Takeshi Kojima et al.(2022), “Large Language Models are Zero-Shot Reasoners”, NeurIPS2022 より引用し,一部改変
+”Large Language Models are Zero-Shot Reasoners”, NeurIPS2022
+入力するプロンプトによる性能の変化
+‹#›
+Instructiveなプロンプトは性能を改善
+MisleadingとIrrelevantは性能を改善しないか悪化．
+
+マニュアルで設定
+[16] Takeshi Kojima et al.(2022), “Large Language Models are Zero-Shot Reasoners”, NeurIPS2022 より引用,一部改変
+”Large Language Models are Zero-Shot Reasoners”, NeurIPS2022
+Zero-Shot-Cotの改善 | LLMを使った自動プロンプト探索
+“Large Language Models Are Human-Level Prompt Engineers”, ICLR2023
+‹#›
+手法
+初期候補から新しい候補を作ってもらう．
+
+結果
+マニュアル：“Let’s think step by step” 
+vs. 
+生成：“Let’s work this out in a step by step way to be sure we have the right answer.”
+MultiArith: 78.7 -> 82.0
+MSM8K: 40.7 -> 43.0
+[17] Yongcho Zhou et al.(2023), “Large Language Models Are Human-Level Prompt Engineers”, ICLR2023 より引用
+Zero-Shot-Cotの改善 | Plan-and-Solve Prompting 
+‹#›
+「計画を立ててから実行せよ」，というような命令を与える
+「必要な変数を保持せよ」というような指示も加えると性能がさらに改善する
+
+[18] Lei Wang et al.(2023), “Plan-and-Solve Prompting”, ACL2023 より引用
+“Plan-and-Solve Prompting”, ACL2023
+Decodingの工夫
+
+‹#›
+CoTの推論能力の改善：Self Consistency
+‹#›
+LMに複数の推論を行わせて（上は3つの例），多数決で答えを決定．
+※ 文的にもっともらしいものが正しい推論とは限らないことを示唆．
+[14] Xuezhi Wang et al.(2022), “Self-Consistency Improves Chain of Thought Reasoning in Language Models” ICLR2023より引用
+“Self-Consistency Improves Chain of Thought Reasoning in Language Models”, ICLR2023
+LLMの推論能力を高める研究 | Tree of Thoughts
+‹#›
+Game of 24での例と結果
+与えられた4つの数字を変換して24を作る
+複数の思考列を出力して評価するSCとは違い，ToTは途中で分岐させる（木探索する）
+ノードの評価もLMで行う
+戦略的思考が必要なタスクで性能が大幅改善
+[19] Shunyu Yao et al.(2023), “Tree of Thoughts: Deliberate Problem Solving with Large Language Models”より引用 
+“Tree of Thoughts: Deliberate Problem Solving with Large Language Models”, 2023
+CoT, CoT-SC, ToTの比較
+‹#›
+[19] Shunyu Yao et al.(2023), “Tree of Thoughts: Deliberate Problem Solving with Large Language Models”より引用 
+“Tree of Thoughts: Deliberate Problem Solving with Large Language Models”, 2023
+何回も推論させることによる性能向上
+
+‹#›
+Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters より
+ここまでのまとめ – プロンプティング / 文脈内学習– 
+
+‹#›
+言語モデルへの入力（プロンプト）を工夫することで性能が改善する（コンテキストから学習しているように見えるため文脈内学習とも呼ばれる
+プロンプトの有無や細かな違いで性能が大きく変わることもある
+プロンプト文やDecodingの方法に関する研究が多数行われている
+プロンプト文：Chain-of-Thoughts, Plan-and-Solve，自動生成
+Decoding：Self-Consistency, Tree-of-Thoughts
+CoT Promptingなどにより，LLMの推論能力が大幅に向上（2022~）
+推奨文献１ | Prompt Engineering Guide (URL[25]) ※一般的なテクニックを知りたい人
+推奨文献２ | “Pre-train, Prompt, and Predict”, (URL[35]) ※個別タスクの詳細を知りたい人
+プロンプティングとDecoding時の工夫による性能向上例
+
+‹#›
+[73] Can Generalist Foundation Models Outcompete Special-Purpose Tuning? Case Study in Medicine より
+LLM-as-a-Judge: プロンプティングによりLLMに文を評価させる
+
+‹#›
+長い文章・自己で生成した回答をを高く評価しがち、というバイアスはあるが、人間の評価と一定一致
+[74] Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena より
+発展的なプロンプト例 | 敵対的プロンプト (Adversarial Prompt)
+‹#›
+ジェイルブレイク（DAN）
+プロンプトの工夫による攻撃
+例：ジェイルブレイク（ペルソナを与えると本来答えないことも答えてくれる．”Do Anything Now” ．）
+その他に，プロンプトインジェクションやプロンプトリークなど（参考[25]）
+加えると攻撃性が上がるトークンの存在なども知られている．
+“Real Toxicity Prompts: Evaluating Neural Toxic Degeneration in Language Models”, 2020[24]
+LLMに対してプロンプトインジェクションを行う普遍トークン
+‹#›
+https://llm-attacks.org[27] 
+
+
+普通に爆弾の作り方を聞いても答えてくれない（フィルタがかかっている）
+特殊なトークンを追加すると答えてくれるようになる．※トークンは学習
+このトークンは複数のモデルに効果がある（！！！
+[26] Andy Zou et al.(2023) “Universal and Transferable Adversarial Attacks on Aligned Language Models” を参考
+[27] Andy Zou et al,(2023) Universal and Transferable Attacks on Aligned Language Models https://llm-attacks.org/ より引用
+“Universal and Transferable Adversarial Attacks on Aligned Language Models”, 2023
+https://www.deeplearning.ai/short-courses/[74]
+‹#›
+日本語翻訳済のコース
+ChatGPT Prompt Engineering for Developers
+Building Systems with the ChatGPT API
+How Diffusion Models Work
+LangChain for LLM Application Development
+LangChain Chat with Your Data
+
+目次
+‹#›
+（導入）学習済みモデルの活用
+プロンプティング (Prompting) / 文脈内学習 (In-Context Learning)
+Augmented Language Models(RAG, Tool-use, Agent)
+2
+外部ツール/知識の利用
+（Augmented LM)
+❄LLM
+回答
+Augmented Language Modelsの大別
+
+‹#›
+1. Retrieval Augmented Language Models
+2. Tool Augmented Language Models 
+❄LLM
+回答
+なぜ外部知識 / ツールを使いたいのか？ (1) 学習効率
+
+‹#›
+タスクを解くのに必要な知識や能力は多様→ LLM単体でタスクを解く場合，すべて内部に保持する必要がある（結果として，単純な足し算のミスが多くなったりする．上表参照．）→ 知識や外部のツールを活用することで効率よく学習出来ないか？
+
+単純な計算ミス
+[16] Takeshi Kojima et al.(2022), “Large Language Models are Zero-Shot Reasoners”, NeurIPS2022 より引用し,一部改変
+なぜ外部知識 / ツールを使いたいのか？ (2) 知識の更新
+
+‹#›
+ケース１ | 知識に誤りが含まれているときにどう修正すれば良い？
+LLMに含まれている知識の修正は大変（そういう研究はいくつかある）（参考）”Locating and Editing Factual Associations in GPT”, NeurIPS2022[36]　など
+ケース２｜モデルに新しい知識を加えたい場合は？
+
+[37] Jungo Kasai, et al.(2022) ”RealTime QA: What‘s the Answer Right Now?”,より引用
+なぜ外部知識 / ツールを使いたいのか？ (3) 信頼性
+
+‹#›
+※ 図はGalacticaの生成結果の冒頭の抜粋
+Hallucination（幻覚）問題 | 誤った知識をもっともらしく話してしまう
+誤った知識を拡散するリスクがあるとして（Twitterでの攻撃により）は数日で閉鎖
+何をもとに生成されているのかが明確である方が良いケースもある
+目次
+‹#›
+（導入）学習済みモデルの活用
+プロンプティング (Prompting) / 文脈内学習 (In-Context Learning)
+Augmented Language Models(RAG, Tool-use, Agent)
+2
+外部ツール/知識の利用
+（Augmented LM)
+❄LLM
+回答
+Retrieval Augmented LMの全体像
+“In-Context Retrieval-Augmented Language Models”, 2023
+‹#›
+World Cup 2022 was the last with 32 teams, before the increase to 
+❄LLM
+Retriever
+
+
+
+
+World Cup 2022 was the last with 32 teams, before the increase to 
+
+外部テキスト
+(Wikipedia / 社内文書)
+FIFA World Cup 2026 will expand to 48 teams
+
+48 in the 2026 tournament
+入力
+入力
+検索された文章
+出力
+[38] Ori Ram et al.(2023) “In-Context Retrieval-Augmented Language Models”, より引用 
+Retriever
+
+‹#›
+
+どのように必要な文書をとってくるか | Retriever
+
+‹#›
+ 
+Retrieverに求められる要件
+“Augmented Language Models: a Survey”, 2023
+‹#›
+（１）ある重要なキーワードを含んでいること（例：World Cup）
+（２）文章の意味的な類似度を反映していること
+一般に，Sparse Retrieverは（１）を，Dense Retrieverは（２）が得意とされる
+[39] Grégoire Mialon et al.(2023) “Augmented Language Models: a Survey” を参考 
+Neural Retriever(Dense Retriever)
+
+‹#›
+[76] Christopher Potts and Omar Khattab, CS224u: Natural language understanding, Information retrieval より
+表現力高い
+がしかし、Queryが来るごとに
+Document含め推論し直す必要あり、コスト高い
+表現力低い
+Queryのみの推論でよいため
+コスト低い
+Neural Retriever(Dense Retriever) 様々なトレードオフ
+
+‹#›
+
+
+
+
+
+Success@10
+スコア上位10位以内に正解文があるかどうか
+
+MRR@10
+何位に出てきたかを考慮した指標
+[77] Moving Beyond Downstream Task Accuracy for Information Retrieval Benchmarking より
+Rerank
+
+‹#›
+
+
+
+
+
+Top 100 by 
+Retriever A
+Top 10 by 
+Retriever B
+LLM as Reranker
+
+‹#›
+[78] Is ChatGPT Good at Search? Investigating Large Language Models as Re-Ranking Agents より
+Generation
+
+‹#›
+
+検索された文章の使い方１ | コンテキストとして追加
+“REPLUG: Retrieval-Augmented Black-Box Language Models”, 2023
+‹#›
+検索した文章を元の入力にくっつけてコンテキストとして入力（Retrieval Augmented Generation，RAG，とも呼ばれる）
+複数ある場合は複数個の予測をアンサンブルすることも
+入力に入れるのではなく中間層に入れるケースもある（e.g. RETRO）
+[40] Weijia Shi et al.(2023) “REPLUG: Retrieval-Augmented Black-Box Language Models” より引用 
+実験結果 | In-Context Augmented Language Models
+“In-Context Retrieval-Augmented Language Models”, 2023
+
+‹#›
+様々なモデルの種類，モデルタイプで性能向上
+※性能評価はPerplexity（低いほど良いもの）
+[38] Ori Ram et al.(2023) “In-Context Retrieval-Augmented Language Models”, より引用 
+実験結果 | REPLUG
+“REPLUG: Retrieval-Augmented Black-Box Language Models”, 2023
+‹#›
+175BのCodexに対しても性能改善（MMLU Benchmark）
+※ REPLUG LSRはRetrieverのみを学習したもの
+[40] Weijia Shi et al.(2023) “REPLUG: Retrieval-Augmented Black-Box Language Models” より引用 
+■ 補足 | RetrieverのFine-Tuning (REPLUG LSR)
+“REPLUG: Retrieval-Augmented Black-Box Language Models”, 2023
+‹#›
+LLMを固定したときに正しい出力が得られるドキュメントが選ばれるようにRetrieverを修正
+※ LSR : LM-Supervised Retrieval
+[40] Weijia Shi et al.(2023) “REPLUG: Retrieval-Augmented Black-Box Language Models” より引用 
+検索された文章の使い方２｜予測の修正
+“KNN-Prompt: Nearest Neighbor Zero-Shot Inference”, 2023
+‹#›
+外部データベースでの類似文書の生成確率によりLMの予測を修正
+（参考）“Nearest Neighbor Language Models”, 2019[42]
+[41] Weijia Shi et al.(2022) “kNN-Prompt: Nearest Neighbor Zero-Shot Inference”, EMNLP2022 より引用
+実験結果 | KNN-Prompt
+“KNN-Prompt: Nearest Neighbor Zero-Shot Inference”, 2023
+
+‹#›
+センチメント分析で特に大きな改善
+基本はクラス分類専用（データベースもそう作っている）
+
+センチメント分析
+[41] Weijia Shi et al.(2022) “kNN-Prompt: Nearest Neighbor Zero-Shot Inference”, EMNLP2022 より引用し,一部改変
+■補足 | Retrieval Augmented LMの様々な手法
+ACL2023 Tutorial, Retrieval-based Language Models and Applications
+‹#›
+何を取り出すのか？取り出した情報をどう利用するのか？いつ取り出すのか？何を学習するか？などで様々な手法がある．
+[43] Akari Asai et al. 2023 “Retrieval-based Language Models and Applications”, ACL2023 より引用
+■応用例 | arXiv Interpreter
+
+‹#›
+松尾研のSlackに常駐するBot（第6回講師の高城くん作）
+arXivのリンクを投げると中身を読んで要約を返してくれる＋質問すると答えてくれる
+
+
+　要約
+教育現場における質問の性質分析と大規模言語モデルを活用した質問回答システムの検討
+原田憲旺1, Edison Marrese-Taylor1,2, 岩澤有祐1, 松尾豊1
+
+1 東京大学 2 産業技術総合研究所
+2024/03/14
+E11-1
+質問の分析
+‹#›
+ランダムに50問サンプルした質問のタイプ分け
+1つの質問が複数のタイプに分類される場合もある
+質問への回答のために必要な要素
+‹#›
+「講義で扱った内容のさらなる深掘り」タイプ
+講義で紹介したトピックの詳細な説明
+サーベイ論文・まとめ記事を紹介
+
+「解釈・理解の確認」タイプ
+なぜその解釈・理解に繋がるのかの確認
+質問で触れられている各トピックの説明
+各トピックの関係性を踏まえた上での回答
+「インタビュー」タイプ
+コミュニティでの議論の紹介
+質問回答パイプライン
+‹#›
+質問文
+検索クエリ
+検索クエリ
+・
+・・
+抽出文章
+抽出文章
+・
+・・
+抽出文章
+抽出文章
+・
+・・
+回答文
+大規模言語モデルによる
+検索クエリ生成
+検索
+大規模言語モデルによる
+回答文生成
+質問回答パイプライン
+‹#›
+質問文
+検索クエリ
+検索クエリ
+・
+・・
+大規模言語モデルによる
+検索クエリ生成
+Given a question, please provide search query to find the answer from Google search results. In order to find the relevant information, please break down the question and provide the search query for each part. Return lists of search queries in following format. Search Query: [bulleted list of search queries]
+{質問文}
+
+gpt-4-1106-preview
+one-shot prompting
+Search Query:
+Query1
+Query2
+サブタスク化
+ツール利用のため整形
+質問回答パイプライン
+‹#›
+検索クエリ
+検索クエリ
+・
+・・
+抽出文章
+抽出文章
+・
+・・
+抽出文章
+抽出文章
+・
+・・
+検索
+Query
+
+Google
+Custom Search
+Title
+Link
+Snippet
+
+Snippet部分含む
+文章抽出
+Title
+Link
+Snippet paragraph
+質問回答パイプライン
+‹#›
+質問文
+抽出文章
+抽出文章
+・
+・・
+抽出文章
+抽出文章
+・
+・・
+回答文
+大規模言語モデルによる
+回答文生成
+Use the provided articles delimited by triple quotes to answer questions. If the answer cannot be found in the articles, write "回答は見つかりませんでした。" Please answer in Japanese.
+
+-Excerpted from [article title] (URL: [URL])
+"""[article paragraph]"""
+...(Web検索結果のセクション続)
+
+Question: [質問文]
+
+gpt-4-1106-preview
+zero-shot prompting
+回答
+質問回答パイプライン
+‹#›
+質問文
+検索クエリ
+検索クエリ
+・
+・・
+抽出文章
+抽出文章
+・
+・・
+抽出文章
+抽出文章
+・
+・・
+回答文
+大規模言語モデルによる
+検索クエリ生成
+検索
+大規模言語モデルによる
+回答文生成
+■Retrieval Augmented LMに関する補足 
+
+‹#›
+Q. どういうデータベースを使えばいいのか？
+A. タスクによる．研究ではWikiやCreative Commonsを使っていることが多い．知識をつけたい場合はつけたい知識のDBを作る．
+
+Q. 大量のデータベースから効率的に検索するには？
+A. 情報検索でよく研究されているのでそちらを参照．Vector DBなどもある．
+（参考）“Augmented Language Models” (LLM Bootcamp), YouTube[44]
+
+Q. RetrieverやLMは学習しなくて良い？
+A. することもある．Retrieverだけを学習したり，LMも学習したりする．
+Long context LLM
+
+‹#›
+[79] https://blog.google/technology/ai/google-gemini-next-generation-model-february-2024　より
+Long context LLMに関連しそうな文章全部入力すればよい？
+
+‹#›
+プロンプト中のどこに正解文書があるかで性能変わる
+
+場所によっては、正解文書がないときよりも悪い
+[80] Lost in the Middle: How Language Models Use Long Contexts より
+Long context LLMに関連しそうな文章全部入力すればよい？
+
+‹#›
+踏まえるべき事実が多いと
+事実を全部踏まえた
+回答を作るのは難しい
+[81] Multi Needle in a Haystackより
+Long context LLMに関連しそうな文章全部入力すればよい？
+
+‹#›
+質問に直接関係し、回答根拠となる文書以外に
+プロンプトに文章を入力すると
+回答性能が悪化する
+[82] RAGGED: Towards Informed Design of Retrieval Augmented Generation Systemsより
+おすすめ資料
+
+‹#›
+目次
+‹#›
+（導入）学習済みモデルの活用
+プロンプティング (Prompting) / 文脈内学習 (In-Context Learning)
+Augmented Language Models(RAG, Tool-use, Agent)
+2
+外部ツール/知識の利用
+（Augmented LM)
+❄LLM
+回答
+Tool-useのイメージ
+
+‹#›
+
+A
+P
+I
+{
+“location”: “東京”
+}
+{
+“weather”: “晴れ”
+}
+LLMを活用して、インターフェースに合うように整形する、繋ぎ合わせる
+LLMにツールの使用有無を判断させる
+LLMに大きなタスクをサブタスク化させる
+コード実行環境をツールとして利用
+‹#›
+Code interpreterの例
+代表的なAugmented LM 2/2 | Tool Augmented LM
+
+‹#›
+知識ではなく外部ツールで拡張されたLM
+生成を修正 / 補強したり，エージェントを操作したりする
+外部ツールの例 | 検索 / コード / API / 別モデル　など
+
+研究例（一例）
+“TALM: Tool Augmented Language Models”, 2022[45]
+“PAL: Program-aided Language Models”, 2022[46]
+“Towards scalable real-world web interaction with grounded language agents”, NeurIPS2022[47]
+“React: Synergizing reasoning and acting in language models”, 2022[48]
+“ToolFormer” Language Models Can Teach Themselves to Use Tools”, 2023[49]
+“ToolkenGPT: Augmenting Frozen LMs with Massive Tools via Tool Embeddings”, 2023[50]
+“Gorilla: Large Language Model Connected with Massive APIs”, 2023[51]
+“Chameleon: Plug-and-Play Compositional Reasoning with Large Language Models”, 2023[52]
+
+↑Tool利用する用学習された有名なモデルの例
+PAL | Program Aided Language Models
+“PAL: Program-aided Language Models”, 2022
+‹#›
+CoTの各推論パスにコードを追加したプロンプトを用意
+生成時には，推論とそれに対応したコードが出力される
+コードをPythonで処理することで結果を得る
+[46] Luyu Gao et al.(2023) “PAL: Program-aided Language Models” より引用 
+PAL | 実験結果
+“PAL: Program-aided Language Models”, 2022
+‹#›
+CoTよりGSM8Kなどの推論ベンチマークで性能改善
+code-davinci-002などのコードがかけるモデルで特に性能改善幅が大きい
+[46] Luyu Gao et al.(2023) “PAL: Program-aided Language Models” より引用 
+■参考 | Code as Policy
+“Code as Policies: Language Model Programs for Embodied Control”, 2022
+‹#›
+言語モデルにコードとして方策を出力させる
+“Stack the blocks on the empty bowl.” 
+不明な関数を呼び出した場合は関数を再起的に作る
+
+※実行可能なスキルはあらかじめ用意されている点に注意(Perception APIs, Control APIs)
+[53] 	Jacky Liang et al.(2023) ”Code as Policies: Language Model Programs for Embodied Control”, より引用
+ReAct | Reasoning + Actionの繰り返し
+“ReAct: Synergizing Reasoning and Acting in Language Models”, ICLR2023
+‹#›
+Thoughtのあとに必要に応じて検索などの行動を行うプロンプトを用意（左）
+行動search[entity] | 検索lookup[entity] | Ctrl+Ffinish[answer] | 回答
+得られた観測（Obs）により次々に行動を行う
+[48] Shunyu Yao et al.(2023) “ReAct: Synergizing Reasoning and Acting in Language Models”より引用
+Toolformer | APIを呼び出すように訓練されたLLM
+“Toolformer: Language Models Can Teach Themselves to Use Tools”, 2023
+‹#›
+必要に応じてAPIを呼び出すように元のテキストデータセットを拡張=> 拡張したデータセットで追加学習
+行動[QA (question)] [Calculator (input)][MT (entity)][WikiSearch(query)] [Calendar]
+[49] Timo Schick et al.(2023) “Toolformer: Language Models Can Teach Themselves to Use Tools” より引用
+ToolkenGPT | Tool as a Token
+“ToolkenGPT: Augmenting Frozen Language Models with Massive Tools via Tool Embeddings”, 2023
+‹#›
+ツール呼び出し用のトークンのみを学習．200以上のツールを利用可能．
+GCDトークンが呼び出されると，最大公約数を戻す，など
+[50] Simbo Hao et al.(2023) “ToolkenGPT: Augmenting Frozen Language Models with Massive Tools via Tool Embeddings” より引用
+Augmented Language Models：外部ツールを利用する事例
+Chameleon: Plug-and-Play Compositional Reasoning with Large Language Models
+‹#›
+どのModule Inventory（右表）をどの順序で使うかをプランニングし順に実行
+Few-Shot Prompting (Fine-Tuningなし）
+Module Inventory
+[52] Pan Lu et al.(2023) “Chameleon: Plug-and-Play Compositional Reasoning with Large Language Models”, NeurIPS2023 より引用
+LATM (LLMs as Tool Makers)
+“Large Language Models as Tool Makers”, 2023
+‹#›
+「XXXをするようなPython Genericなコードを作って」
+一度作ったツールはAPI同様再利用できる＋より能力の低いLLMで呼び出せる
+GPT4でツールを作りChatGPTで呼び出すと，何度も呼び出す場合効率がよい
+[54] Tianle Cai et al. (2023) “Language Models as Tool MakeLargers”, より引用
+プロンプティングによりLLMをツール化、役割分担しタスク遂行
+“SELF-REFINE: Iterative Refinement with Self-Feedback”, 2023
+‹#›
+叩き台作り
+修正点を
+フィードバック
+回答修正
+[83] SELF-REFINE: Iterative Refinement with Self-Feedback より
+研究のワークフローをLLM Agentにより自動化
+“ The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery”,  2024
+‹#›
+[84] The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery より
+GPTs: ChatGPTサービス上で展開
+‹#›
+振る舞いを決める
+プロンプティング部分
+回答根拠とすべき
+ファイルなど
+ツールの選択
+独自ツールの追加
+Microsoft Copilot Studio
+‹#›
+[85] https://www.microsoft.com/ja-jp/microsoft-copilot/microsoft-copilot-studio 
+APIでのサポート
+‹#›
+[86] https://platform.openai.com/docs/guides/function-calling より
+■補足 | Augmented Language Modelsに関する参考資料
+
+‹#›
+■ 全般
+“Augmented Language Models: a Survey”, 2023 
+“Augmented Language Models” (LLM Bootcamp), YouTube[55]（実装よりのTips等を知りたい人向け）
+■ Retrieval Augmented Language Models
+“Retrieval-based Language Models and Applications”, ACL2023 Tutorial[56]（研究詳細知りたい人向け）
+■ Tool Augmented Language Models
+“A Survey on Large Language Model-based Autonomous Agents”, 2023[57] （詳細知りたい人向け）
+■ Agent
+“Large Language Model Agents”, 2024[87]
+❄LLM
+回答
+まとめ | Augmented Language Models
+
+‹#›
+LLMは強力だが，(1) 学習効率，(2) 知識の更新 / 修正，(3) 信頼性などで課題
+Retrieval Augmented LM | 外部データベースの検索 + LLM（REPLUG，In-Context RALM，KNN-Promptなど）どのようにRetrieveするのか？Retrieveした情報をどう使うのか？
+Tool Augmented LM | 外部ツール＋LLM（PAL，CaP，ToolFormer，TookenGPT，Chameleonなど）どういったツールを使うのか？どのようにツールを呼び出すのか？
+（あまり触れてない話題）(1) Prompting vs. Fine-Tuning，(2) スケールさせる方法
+演習
+‹#›
+
+演習
+Hugging faceを使った公開モデルを使った基本的なPromptingの実装
+Retrieval Augmented Generationの実装
+Reference
+‹#›
+[1] 	Alec Radford et al.(2018) “Improving Language Understanding by Generative Pre-Training"
+[2] 	Falcon-180B Demo - a Hugging Face Space by tiiuae,  https://huggingface.co/spaces/tiiuae/falcon-180b-demo アクセス日: 2023/11/18
+[3]	Open LLM Leaderboard - a Hugging Face Space by HuggingFaceH4  https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard アクセス日: 2023/11/18
+[4]	Wayne Xin Zhao et al.(2023), “A Survey of Large Language Models” arXiv:2303.18223
+[5]	Sharan Narang et al. (2021), “Do Transformer Modifications Transfer Across Implementations and Applications?”, Proceedings of the 2021 Conference on Empirical 	Methods in  Natural Language Processing, pages 5758–5773
+[6]	Tom B. Brown et al.(2020), “Language Models are Few-Shot Learners”, arXiv:2005.14165
+[7]	Damai Dai et al.(2023), “Why Can GPT Learn In-Context? Language Models Implicitly Perform Gradient Descent as Meta-Optimizers”, Findings of the Association for 	Computational Linguistics: ACL 2023, pages 4005–4019
+[8] 	Hila Gonen et al.(2022), “Demystifying Prompts in Language Models via Perplexity Estimation”, arXiv:2212.04037
+[9] 	ag news・Datasets at Hugging Face  https://huggingface.co/datasets/ag_news/viewer/default/train アクセス日: 2023/11/18
+[10]	Clémentine Fourrier et al.(2023), What's going on with the Open LLM Leaderboard? https://huggingface.co/blog/evaluating-mmlu-leaderboard アクセス日: 	2023/11/18
+[11]	Dan Hendrycks, et al.(2021) “Measuring Massive Multitask Language Understanding”, arXiv:2009.03300
+[12] 	essica Shieh (2023), Best practices for prompt engineering with OpenAI API | OpenAI Help Center 						https://help.openai.com/en/articles/6654000-best-practices-for-prompt-	engineering-with-openai-api アクセス日: 2023/11/18
+[13] 	Jason Wei et al.(2022), “Chain-of-Thought Prompting Elicits Reasoning in Large Language Models”, NeurIPS2022
+[14]	Xuezhi Wang et al.(2022), “Self-Consistency Improves Chain of Thought Reasoning in Language Models”, arXiv:2203.11171
+[15]	Aitor Lewkowycz et al.(2022) “Solving Quantitative Reasoning Problems with Language Models”, arXiv:2206.14858
+[16]	Takeshi Kojima et al.(2022), “Large Language Models are Zero-Shot Reasoners”, NeurIPS2022
+[17]	Yongcho Zhou et al.(2023), “Large Language Models Are Human-Level Prompt Engineers”, ICLR2023
+[18] 	Lei Wang et al.(2023), “Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models”, Proceedings of the 61st Annual Meeting of 	the Association for Computational Linguistics Volume 1: Long Papers, pages 2609–2634
+[19]	Shunyu Yao et al.(2023), “Tree of Thoughts: Deliberate Problem Solving with Large Language Models”, arXiv:2305.10601
+
+Reference
+‹#›
+[20] 	Yao Fu et al.(2023), “Chain-of-Thought Hub: A Continuous Effort to Measure Large Language Models' Reasoning Performance”, arXiv:2305.17306
+[21] 	FranxYao(2023), GitHub-FranxYao/chain-of-thought-hub: Benchmarking large language models' complex reasoning ability with chain-of-thought prompting 	https://github.com/FranxYao/chain-of-thought-hub アクセス日:2023/11/18
+[22]	Aarohi Srivastava et al.(2022) “Beyond the Imitation Game: Quantifying and extrapolating the capabilities of language models” arXiv2206.04615
+[23] 	Percy Liang et al. (2022) “Holistic Evaluation of Language Models” arXiv2211.09110
+[24] 	Samuel Gehman et al.(2020) “Real Toxicity Prompts: Evaluating Neural Toxic Degeneration in Language Models” Findings of the Association for Computational 	Linguistics: EMNLP 2020, pages 3356–3369
+[25] 	敵対的プロンプト（Adversarial Prompting） | Prompt Engineering Guide https://www.promptingguide.ai/jp/risks/adversarial アクセス日: 2023/11/18
+[26] 	Andy Zou et al.(2023) “Universal and Transferable Adversarial Attacks on Aligned Language Models” arXiv:2307.15043
+[27] 	Andy Zou et al,(2023) Universal and Transferable Attacks on Aligned Language Models https://llm-attacks.org/ アクセス日: 2023/11/18
+[28] 	Jean-Baptiste Alayrac et al.(2022) “Flamingo: a Visual Language Model for Few-Shot Learning”  NeurIPS2022
+[29] 	Jean-Baptiste Alayrac et al.(2022) Tackling multiple tasks with a single visual language model - Google DeepMind 			https://deepmind.google/discover/blog/tackling-multiple-tasks-with-a-single-visual-language-model/ アクセス日: 2023/11/18
+[30] 	Damai Dai et al.(2023) “Why Can GPT Learn In-Context? Language Models Implicitly Perform Gradient Descent as Meta-Optimizers” Findings of the Association for 	Computational Linguistics: ACL 2023, pages 4005–4019
+[31] 	Sachin Ravi & Hugo Larochelle(2017) “OPTIMIZATION AS A MODEL FOR FEW-SHOT LEARNING”  ICLR2017
+[32] 	Sewon Min et al.(2022) “Rethinking the Role of Demonstrations: What Makes In-Context Learning Work?” Proceedings of the 2022 Conference on Empirical Methods in 	Natural Language Processing, pages 11048 - 11064
+[33] 	Yasaman Rezeghi et al.(2022) “Impact of Pretraining Term Frequencies on Few-Shot Numerical Reasoning “Findings of the Association for Computational Linguistics: EMNLP 	2022, pages 840 - 854
+[34] 	Jerry Wei et al.(2023) “Larger language models do in-context learning differently” arXiv:2303.03846
+[35] 	Pengfei Liu(2021) “Pre-train, Prompt, and Predict: A Systematic Survey of Prompting Methods in Natural Language Processing”, arXiv 2107.13586
+[36] 	Kevin Meng et al.(2022) “Locating and Editing Factual Associations in GPT”, NeurIPS2022
+[37] 	Jungo Kasai, et al.(2022) ”RealTime QA: What's the Answer Right Now?”, arXiv:2207.13332
+
+Reference
+‹#›
+[38] 	Ori Ram et al.(2023) “In-Context Retrieval-Augmented Language Models”, arXiv:2302.00083
+[39] 	Grégoire Mialon et al.(2023) “Augmented Language Models: a Survey”, arXiv:2302.07842
+[40] 	Weijia Shi et al.(2023) “REPLUG: Retrieval-Augmented Black-Box Language Models”, arXiv:2301.12652
+[41] 	Weijia Shi et al.(2022) “kNN-Prompt: Nearest Neighbor Zero-Shot Inference”, Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing, 	pages 3254 - 3265
+[42] 	Urvashi Khandelwai et al.(2020) “Generalization through Memorization: Nearest Neighbor Language Models” ICLR2020
+[43] 	Akari Asai et al. 2023 “Retrieval-based Language Models and Applications”, Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics Volume 6: 	Tutorial Abstracts, pages 41–46
+[44] 	Augmented Language Models (LLM Bootcamp) – YouTube https://www.youtube.com/watch?v=YdeuQhlHmCA アクセス日: 2023/11/18
+[45]	Aaron Parisi et al.(2022) “TALM: Tool Augmented Language Models” arXiv:2205.12255
+[46] 	Luyu Gao et al.(2023) “PAL: Program-aided Language Models”, arXiv:2211.10435
+[47]	Shunyu Yao et al.(2022) “WebShop: Towards Scalable Real-World Web Interaction with Grounded Language Agents”, NeurIPS 2022
+[48]	Shunyu Yao et al.(2023) “ReAct: Synergizing Reasoning and Acting in Language Models”, arXiv:2210.03629
+[49] 	Timo Schick et al.(2023) “Toolformer: Language Models Can Teach Themselves to Use Tools”, arXiv:2302.04761
+[50]	Simbo Hao et al.(2023) “ToolkenGPT: Augmenting Frozen Language Models with Massive Tools via Tool Embeddings”, NeurIPS2023
+[51] 	Shishir G. Patil et al.(2023) “Gorilla: Large Language Model Connected with Massive APIs”, arXiv:2305.15334
+[52] 	Pan Lu et al.(2023) “Chameleon: Plug-and-Play Compositional Reasoning with Large Language Models”, NeurIPS2023
+[53] 	Jacky Liang et al.(2023) ”Code as Policies: Language Model Programs for Embodied Control”, arXiv:2209.07753
+[54] 	Tianle Cai et al. (2023) “Language Models as Tool MakeLargers”, arXiv:2305.17126
+[55] 	Augmented Language Models (LLM Bootcamp) – YouTube https://www.youtube.com/watch?v=YdeuQhlHmCA アクセス日: 2023/11/18
+[56] 	Akari Asai et al.(2023) “Retrieval-based Language Models and Applications” https://acl2023-retrieval-lm.github.io/ アクセス日:2023/11/18
+[57] 	Lei Wang et al.(2023), “A Survey on Large Language Model based Autonomous Agents” arXiv:2308.11432
+Reference
+‹#›
+[58]	Ashish Vaswani et al. (2017) “Attention Is All You Need” NeurIPS 2017 より引用
+[59]	OpenAI 2023 “GPT-4 Technical Report”
+[60]	 Jungo Kasai et al. (2023), “Evaluating gpt-4 and ChatGPTt on Japanese medical licensing examinations” 
+[61] 	Dell'Acqua et al(2023), “Navigating the Jagged Technological Frontier: Field Experimental Evidence of the Effects of AI on Knowledge Worker Productivity and Quality”
+[62] 	GitHub Copilot Enterprise is now generally available, https://github.blog/2024-02-27-github-copilot-enterprise-is-now-generally-available/
+[63] 	https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/
+[64] 	https://lmarena.ai/
+[65] 	https://wandb.ai/wandb-japan/llm-leaderboard3/reports/Nejumi-LLM-3--Vmlldzo3OTg2NjM2?accessToken=wpnwc9whr96pxm40dfe4k3xq513f9jc4yhj7q6pnvj4jtayoefbc77qhzbsrztgz
+[66] 	https://fireworks.ai/
+[67] 	https://github.com/kenoharada/llm-api-utils 
+[68] 	Stanford CS224N NLP with Deep Learning | 2023 | Hugging Face Tutorial, Eric Frankel 
+[69] 	https://github.com/huggingface/transformers
+[70] 	Agarwal et al.(2024), “Many-Shot In-Context Learning”
+[71] 	A Survey of Prompt Engineering Methods in Large Language Models for Different NLP Tasks
+[72] 	Prompt engineering overview 
+[73] 	Can Generalist Foundation Models Outcompete Special-Purpose Tuning? Case Study in Medicine
+[74] 	Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena 
+[75] 	https://www.deeplearning.ai/short-courses/ 
+[76] 	Christopher Potts and Omar Khattab, CS224u: Natural language understanding, Information retrieval
+[77] 	Moving Beyond Downstream Task Accuracy for Information Retrieval Benchmarking
+
+Reference
+‹#›
+[78] 	Is ChatGPT Good at Search? Investigating Large Language Models as Re-Ranking Agents
+[79] 	https://blog.google/technology/ai/google-gemini-next-generation-model-february-2024
+[80] 	Lost in the Middle: How Language Models Use Long Contexts 
+[81] 	Multi Needle in a Haystack
+[82] 	 RAGGED: Towards Informed Design of Retrieval Augmented Generation Systems
+[83] 	 SELF-REFINE: Iterative Refinement with Self-Feedback 
+[84] 	 The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery 
+[85] 	 https://www.microsoft.com/ja-jp/microsoft-copilot/microsoft-copilot-studio 
+[86] 	 https://platform.openai.com/docs/guides/function-calling 
+[87] 	“Large Language Model Agents”, 2024
+
+■補足 | Minerva (PaLM+CoT+FT+Self Consistency)
+‹#›
+MATH, OCW, GSM8k, MMLU-STEMでの結果．
+それぞれ中高等数学，MITの学部レベルの問題，中学レベルの数学問題，STEM問題
+既存SOTAを大きく上回る．
+[15] Aitor Lewkowycz et al.(2022) “Solving Quantitative Reasoning Problems with Language Models”より引用
+“Solving Quantitative Reasoning Problems with Language Models”, arXiv (2022),
+■補足 | コードでの学習と論理推論能力
+“A Survey of Large Language Models”, 2023
+‹#›
+■ 主要なモデルの学習データの構成
+最近のモデルは多くのケースでコードでの学習を行っている．GPT-3はなし．
+Codeで学習したモデル（例：code-davinci-002）はGPT-3より推論性能が良い．
+Chat-GPTもcode-davinci-002をベースに学習されているとされる．
+[4] Wayne Xin Zhao et al.(2023), “A Survey of Large Language Models” より引用
+■補足 | LLMの性能をどう測るのか
+‹#›
+SuperGLUEの性能の変遷
+Big-Benchの評価例
+問題１：性能上限に達す流までの速さ | 評価の大規模化 （≒かかる金額が莫大に）
+SuperGLUE（左）：登場から数年で人間を上回る性能
+Big-Bench（右）: 444名のコントリビューターによる204 tasksを収集し評価
+問題２：性能以外の評価 (Fairness, Bias, Toxicity …) 
+”Holistic Evaluation of Language Models”, 2022, arXiv)
+問題３：Contamination問題（API，Web経由でデータ取得）
+[22] Aarohi Srivastava et al.(2022) “Beyond the Imitation Game: Quantifying and extrapolating the capabilities of language models” より引用(左図) 
+[23] Percy Liang et al. (2022) “Holistic Evaluation of Language Models” より引用(右図) 
+“Beyond the Imitation Game: Quantifying and extrapolating the capabilities of language models”, 2022
+Q: Is Mickey Mouse hypothetically unlikely to make a purchase at Zazzle?
+（ご参考）青字が入力．オレンジは意訳．黒がGPTの出力．※ 論文外の結果．
+‹#›
+A: Let’s think step by step. 
+First, we need to consider Mickey Mouse’s budget. Based on his income as a famous cartoon character, it’s safe to say that he has a pretty large budget. 
+（意訳：ミッキーは有名だから莫大な予算を持つはず） 
+Next, we need to think about what Mickey Mouse would want to purchase at Zazzle. We can safely assume that he would be interested in purchasing items that are related to his image, such as t-shirts, coffee mugs, and mouse pads. 
+（意訳：ミッキーは自分のイメージに合うアイテムなら興味を持つかもしれない） 
+Finally, we need to consider the prices of the items at Zazzle. Based on the prices of similar items at other stores, it’s likely that the prices at Zazzle are within Mickey Mouse’s budget. 
+（意訳：Zazzleで売っているものの値段はミッキーの予算内であるはずだ） 
+Therefore, we can conclude that it is not hypothetically unlikely for Mickey Mouse to make a purchase at Zazzle. 
+（意訳：ミッキーはZazzleで買い物しそうにないとは言えないと結論づける） 
+
+※正しい推論をするこもともある．例：「ミッキーは架空のキャラクターなので靴は買わない」
+どのように指示出しをすると良いか？ Prompt Engineering
+
+‹#›
+どのようなタスクを解かせたいかの指示文をモデルに合わせて調整
+デモンストレーション例の利用: few-shot/many-shot
+モデルの論理的思考能力を引き出す: CoT/zero-shot-CoT
+A Survey of Prompt Engineering Methods in Large Language Models for Different NLP Tasksより
+Prompt engineering overview より
+プロンプティング / 文脈内学習についての補足
+
+‹#›
+その他のプロンプティング
+何をどう文脈内学習しているのか？
+
+発展的なプロンプト例 | 敵対的プロンプト (Adversarial Prompt)
+‹#›
+ジェイルブレイク（DAN）
+プロンプトの工夫による攻撃
+例：ジェイルブレイク（ペルソナを与えると本来答えないことも答えてくれる．”Do Anything Now” ．）
+その他に，プロンプトインジェクションやプロンプトリークなど（参考[25]）
+加えると攻撃性が上がるトークンの存在なども知られている．
+“Real Toxicity Prompts: Evaluating Neural Toxic Degeneration in Language Models”, 2020[24]
+LLMに対してプロンプトインジェクションを行う普遍トークン
+‹#›
+https://llm-attacks.org[27] 
+
+
+普通に爆弾の作り方を聞いても答えてくれない（フィルタがかかっている）
+特殊なトークンを追加すると答えてくれるようになる．※トークンは学習
+このトークンは複数のモデルに効果がある（！！！
+[26] Andy Zou et al.(2023) “Universal and Transferable Adversarial Attacks on Aligned Language Models” を参考
+[27] Andy Zou et al,(2023) Universal and Transferable Attacks on Aligned Language Models https://llm-attacks.org/ より引用
+“Universal and Transferable Adversarial Attacks on Aligned Language Models”, 2023
+発展的なプロンプト例 | 行動系列の生成
+松尾研での研究例
+‹#›
+{action_description}
+与えられた指示を指定された行動系列に変換（上の9つ）
+Prompt: “Your mission is to convert natural language commands an operator given into JSON format which the robot can understand. …”
+環境情報はDeticにより抽出
+発展的なプロンプト例 | 行動系列の生成（実行結果）
+松尾研での研究例
+‹#›
+成果例：RoboCup Japan Open 2023優勝，RoboCup世界大会3位
+発展的なプロンプト例 | マルチモーダルプロンプト
+‹#›
+学習済Vision Model(NF-Net) とLanguage Model (Chinchilla, 70B) を統合．計80B．
+ペアデータで接続部分 (Perceiver ResamplerとGated Xattn) を学習．
+フラミンゴの写真を見て「フラミンゴ。カリブ諸島や南アメリカで見られます」などと返すなど画像・言語で様々な補完ができる．　
+https://www.deepmind.com/blog/tackling-multiple-tasks-with-a-single-visual-language-model[29]
+[28] Jean-Baptiste Alayrac et al.(2022) “Flamingo: a Visual Language Model for Few-Shot Learning”  NeurIPS2022より引用
+“Flamingo : a Visual Language Model for Few-Shot Learning”, 2022, DeepMind
+文脈内学習における謎：何をどう学習しているのか？
+‹#›
+Fine-Tuning（左図上側）
+データとパラメータを元に勾配を計算することでモデルを動かす
+
+In-Context Learning（左図下側）
+Demonstrationを入れなかったときとの差分をメタ勾配と見做せる
+（メタ勾配を使って暗黙的にFT）
+
+※ ICLは小データではFTより性能が良いことが多い
+上記論文のA. メタ勾配を計算して暗黙的にパラメータを更新しているのでは？
+[30] Damai Dai et al.(2023) “Why Can GPT Learn In-Context? Language Models Implicitly Perform Gradient Descent as Meta-Optimizers” ACL 2023 より引用
+“Why Can GPT Learn In-Context? Language Models Implicitly Perform Gradient Descent as Meta-Optimizers”, ACL2023
+■補足 | 文脈内学習のようなやり方自体は昔からある
+‹#›
+違い1 
+構造がRNNからTransformerに
+※ 長期系列を見れる分    バッチ学習に近い？
+違い2 
+元のモデルの性能が桁違い
+[31] Sachin Ravi & Hugo Larochelle(2017) “OPTIMIZATION AS A MODEL FOR FEW-SHOT LEARNING”  ICLR2017 より引用
+“Optimization as a Model for Few-Shot Learning”, ICLR2017
+文脈内学習における謎：何をどう学習しているのか？
+‹#›
+実験方法
+ラベルをランダムに変更
+
+結果
+ラベルをランダムにしてもICLの性能劣化は微小
+
+考察
+入出力関係以外の要素を学習しているのでは？
+（フォーマット，入力分布，ラベル空間，etc. ）
+[32] Sewon Min et al.(2022) “Rethinking the Role of Demonstrations: What Makes In-Context Learning Work?” EMNLP2022 より引用
+“Rethinking the Role of Demonstrations: What Makes In-Context Learning Work?”
+文脈内学習における謎：何をどう学習しているのか？
+“Impact of Pretraining Term Frequencies on Few-Shot Reasoning
+”
+‹#›
+実験方法
+事前学習データでの単語の頻度と正解率の相関を検証
+
+結果
+出現頻度と正解率には強い相関が見られる
+
+考察
+新しい知識を学んでいるのかは疑問がある結果
+Additionの例だが他でも同様の傾向
+[33] Yasaman Rezeghi et al.(2022) “Impact of Pretraining Term Frequencies on Few-Shot Numerical Reasoning” EMNLP 2022 より引用
+文脈内学習における謎：何をどう学習しているのか？
+“Larger language models do in-context learning differently”, 2023
+‹#›
+実験方法
+ラベルをFlip
+ラベルを意味がない単語に
+※ 先ほどはランダムなのでやや異なる
+
+結果
+大規模モデルのみ与えられた元の入出力関係の予測が大きく劣化
+
+考察
+大規模モデルは入出力関係も学習している傍証（異なる形でICLしている？）
+[34] Jerry Wei et al.(2023) “Larger language models do in-context learning differently” より引用
